@@ -1,7 +1,7 @@
 import os
 import re
 import pymysql
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -120,6 +120,23 @@ def api_contact():
 def health_check():
     """Health check endpoint."""
     return jsonify({"status": "healthy"}), 200
+
+# --- Static & Frontend Routes ---
+
+@app.route('/')
+def serve_index():
+    """Serve main portfolio page"""
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    return send_from_directory(root_dir, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    """Serve photos, assets, or fallback to index.html"""
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    file_path = os.path.join(root_dir, path)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return send_from_directory(root_dir, path)
+    return send_from_directory(root_dir, 'index.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
