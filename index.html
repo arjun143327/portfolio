@@ -611,6 +611,12 @@
       text-align: center;
       padding: 160px 4vw;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 45vh;
+      overflow: hidden;
     }
 
     .callout::before {
@@ -620,7 +626,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       font-family: var(--font-display);
-      font-size: clamp(200px, 40vw, 600px);
+      font-size: clamp(200px, 35vw, 480px);
       line-height: 1;
       color: var(--accent-fill);
       opacity: 0.06;
@@ -630,18 +636,20 @@
 
     .pull-quote {
       font-family: var(--font-display);
-      font-size: clamp(24px, 4vw, 44px);
-      line-height: 1.35;
-      max-width: 1000px;
-      margin: 0 auto 40px auto;
+      font-size: clamp(22px, 3.5vw, 40px);
+      line-height: 1.45;
+      max-width: 960px;
+      margin: 0 auto 32px auto;
       letter-spacing: -0.01em;
       position: relative;
       z-index: 1;
+      text-align: center;
+      width: 100%;
     }
 
     .pull-quote span {
       display: inline-block;
-      margin-right: 0.28em;
+      margin-right: 0.32em;
       opacity: 0;
       transform: translateY(20px);
     }
@@ -650,8 +658,12 @@
       font-family: var(--font-mono);
       font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
       color: var(--text-secondary);
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin: 0 auto;
     }
 
     /* Education */
@@ -691,6 +703,78 @@
       font-family: var(--font-mono);
       font-size: 14px;
     }
+
+    /* Contact Form */
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      padding: 12px 0;
+      transition: border-color 0.3s ease;
+      resize: none;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-bottom-color: var(--accent-fill);
+    }
+
+    .contact-form button {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 16px 32px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+
+    .contact-form button:hover {
+      border-color: var(--accent-fill);
+      background: var(--accent-fill);
+    }
+
+    #form-status {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      margin-top: 16px;
+      min-height: 18px;
+    }
+    .status-success { color: #4ade80; }
+    .status-error { color: #f87171; }
 
     /* Footer */
     .footer {
@@ -879,63 +963,8 @@
     <!-- Featured Projects -->
     <section class="section projects" id="work">
       <h2 class="section-title reveal">Featured Projects</h2>
-      <div class="proj-grid">
-        <div class="proj-card reveal">
-          <div class="proj-visual">
-            <div class="proj-index">01</div>
-          </div>
-          <div class="proj-card-content">
-            <div class="proj-header">
-              <h3>Budgetrix</h3>
-            </div>
-            <p class="proj-desc">Comprehensive expense tracking and financial modeling platform with real-time data visualization.</p>
-            <div class="proj-tags">
-              <span>React</span><span>Node.js</span><span>MongoDB</span>
-            </div>
-            <div class="proj-links">
-              <a href="#">Live Demo ↗</a>
-              <a href="#">View Repo ↗</a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="proj-card reveal">
-          <div class="proj-visual" style="background: radial-gradient(circle at 100% 100%, rgba(255,255,255,0.08), transparent 70%);">
-            <div class="proj-index">02</div>
-          </div>
-          <div class="proj-card-content">
-            <div class="proj-header">
-              <h3>Grocery Dashboard</h3>
-            </div>
-            <p class="proj-desc">Automated financial reporting and inventory tracking system built for NGO logistics.</p>
-            <div class="proj-tags">
-              <span>Python</span><span>Flask</span><span>Excel API</span>
-            </div>
-            <div class="proj-links">
-              <a href="#">Live Demo ↗</a>
-              <a href="#">View Repo ↗</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="proj-card reveal">
-          <div class="proj-visual" style="background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent 50%);">
-            <div class="proj-index">03</div>
-          </div>
-          <div class="proj-card-content">
-            <div class="proj-header">
-              <h3>Silent Bridge</h3>
-            </div>
-            <p class="proj-desc">Real-time ISL voice translation interface utilizing Web Speech API and animated avatars.</p>
-            <div class="proj-tags">
-              <span>JavaScript</span><span>Web Speech</span><span>WebGL</span>
-            </div>
-            <div class="proj-links">
-              <a href="#">Live Demo ↗</a>
-              <a href="#">View Repo ↗</a>
-            </div>
-          </div>
-        </div>
+      <div class="proj-grid" id="projectsContainer">
+        <!-- Projects will be dynamically injected here by fetch() -->
       </div>
     </section>
 
@@ -963,7 +992,7 @@
 
     <!-- Pull-Quote -->
     <section class="section callout">
-      <blockquote class="pull-quote" id="patentQuote">
+      <blockquote class="pull-quote" id="patentQuote" data-quote='"A novel method for predictive, autonomous distribution of compute resources across decentralized networks, reducing latency by up to 40%."'>
         "A novel method for predictive, autonomous distribution of compute resources across decentralized networks, reducing latency by up to 40%."
       </blockquote>
       <p class="quote-attr reveal">— S. Arjun, Co-Inventor</p>
@@ -989,6 +1018,27 @@
           <div class="edu-grade">86.5%</div>
         </div>
       </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="section contact" id="contact" style="text-align: center;">
+      <h2 class="section-title reveal">Get in Touch</h2>
+      <form class="contact-form reveal" id="contactForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" id="submitBtn">Send Message</button>
+        <div id="form-status"></div>
+      </form>
     </section>
   </main>
 
@@ -1154,16 +1204,137 @@
         { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power3.out", delay: 0.2 }
       );
 
+      loadProjects();
+      setupContactForm();
       initReveals();
       ScrollTrigger.refresh();
     }
 
-    function initReveals() {
-      // Content Reveal Animations on Scroll
-      const reveals = document.querySelectorAll('.reveal');
-      reveals.forEach(el => {
+    async function loadProjects() {
+      const container = document.getElementById('projectsContainer');
+      const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? 'http://localhost:5000/api/projects' 
+        : '/api/projects'; // Fallback for production
+
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error('Failed to fetch projects');
+        
+        const projects = await response.json();
+        
+        if (projects.length === 0) throw new Error('No projects found');
+
+        // Gradients to visually distinguish project cards, repeating if more than 3
+        const gradients = [
+          '', // Default
+          'radial-gradient(circle at 100% 100%, rgba(255,255,255,0.08), transparent 70%)',
+          'linear-gradient(135deg, rgba(255,255,255,0.05), transparent 50%)'
+        ];
+
+        container.innerHTML = projects.map((proj, i) => {
+          const indexStr = String(i + 1).padStart(2, '0');
+          const style = gradients[i % gradients.length] ? `style="background: ${gradients[i % gradients.length]};"` : '';
+          
+          let tagsHtml = '';
+          if (Array.isArray(proj.tech_stack)) {
+            tagsHtml = proj.tech_stack.map(tag => `<span>${tag}</span>`).join('');
+          } else if (typeof proj.tech_stack === 'string') {
+            try {
+              const parsed = JSON.parse(proj.tech_stack);
+              if (Array.isArray(parsed)) tagsHtml = parsed.map(tag => `<span>${tag}</span>`).join('');
+            } catch (e) {
+              tagsHtml = proj.tech_stack.split(',').map(tag => `<span>${tag.trim()}</span>`).join('');
+            }
+          }
+
+          return `
+            <div class="proj-card reveal">
+              <div class="proj-visual" ${style}>
+                <div class="proj-index">${indexStr}</div>
+              </div>
+              <div class="proj-card-content">
+                <div class="proj-header">
+                  <h3>${proj.title}</h3>
+                </div>
+                <p class="proj-desc">${proj.description}</p>
+                <div class="proj-tags">
+                  ${tagsHtml}
+                </div>
+                <div class="proj-links">
+                  <a href="${proj.demo_url}" target="_blank">Live Demo ↗</a>
+                  <a href="${proj.repo_url}" target="_blank">View Repo ↗</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (error) {
+        console.error('Error loading projects:', error);
+        container.innerHTML = `<p style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">Projects could not be loaded at this time. Please make sure the backend is running.</p>`;
+      } finally {
+        // Initialize reveals specifically for dynamically added project cards
+        initProjectsReveals();
+        setTimeout(() => ScrollTrigger.refresh(), 100);
+      }
+    }
+
+    function setupContactForm() {
+      const form = document.getElementById('contactForm');
+      const statusDiv = document.getElementById('form-status');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        statusDiv.className = '';
+        statusDiv.textContent = 'Sending...';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+
+        const payload = {
+          name: form.name.value,
+          email: form.email.value,
+          message: form.message.value
+        };
+
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+          ? 'http://localhost:5000/api/contact' 
+          : '/api/contact';
+
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok) {
+            statusDiv.className = 'status-success';
+            statusDiv.textContent = result.message || 'Message delivered successfully.';
+            form.reset();
+          } else {
+            throw new Error(result.message || 'Failed to send message.');
+          }
+        } catch (error) {
+          statusDiv.className = 'status-error';
+          statusDiv.textContent = error.message;
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+        }
+      });
+    }
+
+    function initProjectsReveals() {
+      const projReveals = document.querySelectorAll('#projectsContainer .reveal');
+      projReveals.forEach(el => {
         gsap.fromTo(el, 
-          { y: 40, opacity: 0 },
+          { y: 40, opacity: 0 }, 
           { 
             y: 0, 
             opacity: 1, 
@@ -1171,7 +1342,28 @@
             ease: "power2.out",
             scrollTrigger: {
               trigger: el,
-              start: "top 90%", // Trigger when element is 90% down the viewport
+              start: "top 90%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      });
+    }
+
+    function initReveals() {
+      // Content Reveal Animations on Scroll
+      const reveals = document.querySelectorAll('.reveal');
+      reveals.forEach(el => {
+        gsap.fromTo(el, 
+          { y: 40, opacity: 0 }, 
+          { 
+            y: 0, 
+            opacity: 1, 
+            duration: 0.8, 
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 90%",
               toggleActions: "play none none reverse"
             }
           }
@@ -1198,10 +1390,11 @@
         );
       });
 
-      // Word-by-word quote reveal
+      // Word-by-word quote reveal (guarded against re-splitting)
       const quoteEl = document.getElementById('patentQuote');
-      if (quoteEl) {
-        const text = quoteEl.innerText.trim();
+      if (quoteEl && !quoteEl.dataset.split) {
+        quoteEl.dataset.split = "true";
+        const text = quoteEl.getAttribute('data-quote') || quoteEl.innerText.trim();
         const words = text.split(/\s+/);
         quoteEl.innerHTML = '';
         words.forEach(word => {
@@ -1214,7 +1407,7 @@
           y: 0,
           opacity: 1,
           duration: 0.6,
-          stagger: 0.04,
+          stagger: 0.03,
           ease: "power2.out",
           scrollTrigger: {
             trigger: quoteEl,
