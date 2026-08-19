@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-from db import db, Project, ContactMessage
+from backend.db import db, Project, ContactMessage
 
 load_dotenv()
 
