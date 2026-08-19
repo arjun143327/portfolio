@@ -21,27 +21,78 @@ DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
 DB_NAME = os.environ.get("DB_NAME", "portfolio_db")
 DB_PORT = os.environ.get("DB_PORT", "3306")
 
+# Detect if using a remote cloud DB (e.g. Aiven, TiDB, Railway)
+is_cloud_db = DB_HOST not in ["localhost", "127.0.0.1", ""]
+
 # 1. Automatically create the database if it doesn't exist
 try:
-    # Connect directly to MySQL without selecting a specific database
-    conn = pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASSWORD, port=int(DB_PORT))
+    connect_kwargs = {
+        "host": DB_HOST,
+        "user": DB_USER,
+        "password": DB_PASSWORD,
+        "port": int(DB_PORT)
+    }
+    if is_cloud_db:
+        connect_kwargs["ssl"] = {"check_hostname": False}
+        
+    conn = pymysql.connect(**connect_kwargs)
     with conn.cursor() as cursor:
         cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME};")
     conn.commit()
     conn.close()
     print(f"Verified database '{DB_NAME}' exists.")
 except Exception as e:
-    print(f"Warning: Could not connect to MySQL server to create database. Error: {e}")
+    print(f"Notice during DB pre-check: {e}")
 
 # Initialize Flask App
 app = Flask(__name__)
 CORS(app)
 
-# 2. Configure Flask-SQLAlchemy
+# 2. Configure Flask-SQLAlchemy with SSL support for cloud
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+if is_cloud_db:
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        "connect_args": {
+            "ssl": {
+                "check_hostname": False
+            }
+        }
+    }
+
 db.init_app(app)
+
+# Fallback seed data in case cloud DB is initializing
+FALLBACK_PROJECTS = [
+    {
+        "id": 1,
+        "title": "Budgetrix",
+        "description": "Comprehensive expense tracking and financial modeling platform with real-time data visualization.",
+        "tech_stack": ["flutter", "riverpod"],
+        "demo_url": "#",
+        "repo_url": "#",
+        "display_order": 1
+    },
+    {
+        "id": 2,
+        "title": "Grocery Dashboard",
+        "description": "Automated financial reporting and inventory tracking system built for NGO logistics.",
+        "tech_stack": ["Python", "Flask", "Excel API"],
+        "demo_url": "#",
+        "repo_url": "#",
+        "display_order": 2
+    },
+    {
+        "id": 3,
+        "title": "Silent Bridge",
+        "description": "Real-time ISL voice translation interface utilizing Web Speech API and animated avatars.",
+        "tech_stack": ["JavaScript", "Web Speech", "WebGL"],
+        "demo_url": "#",
+        "repo_url": "#",
+        "display_order": 3
+    }
+]
 
 # 3. Create tables and automatically seed the database on startup
 with app.app_context():
@@ -53,23 +104,11 @@ with app.app_context():
             print("Seeding initial projects...")
             seed_projects = [
                 Project(
-                    title='Budgetrix',
-                    description='Comprehensive expense tracking and financial modeling platform with real-time data visualization.',
-                    tech_stack=["flutter","riverpod"],
-                    display_order=1
-                ),
-                Project(
-                    title='Grocery Dashboard',
-                    description='Automated financial reporting and inventory tracking system built for NGO logistics.',
-                    tech_stack=["Python", "Flask", "Excel API"],
-                    display_order=2
-                ),
-                Project(
-                    title='Silent Bridge',
-                    description='Real-time ISL voice translation interface utilizing Web Speech API and animated avatars.',
-                    tech_stack=["JavaScript", "Web Speech", "WebGL"],
-                    display_order=3
-                )
+                    title=p["title"],
+                    description=p["description"],
+                    tech_stack=p["tech_stack"],
+                    display_order=p["display_order"]
+                ) for p in FALLBACK_PROJECTS
             ]
             db.session.add_all(seed_projects)
             db.session.commit()
@@ -82,13 +121,15 @@ with app.app_context():
 
 @app.route('/api/projects', methods=['GET'])
 def api_projects():
-    """Fetch all projects, ordered by display_order"""
+    """Fetch all projects, ordered by display_order with fallback resilience"""
     try:
         projects = Project.query.order_by(Project.display_order.asc()).all()
-        return jsonify([proj.to_dict() for proj in projects]), 200
+        if projects and len(projects) > 0:
+            return jsonify([proj.to_dict() for proj in projects]), 200
+        return jsonify(FALLBACK_PROJECTS), 200
     except Exception as e:
         app.logger.error(f"Error fetching projects: {e}")
-        return jsonify({"error": "Failed to fetch projects"}), 500
+        return jsonify(FALLBACK_PROJECTS), 200
 
 @app.route('/api/contact', methods=['POST'])
 def api_contact():
